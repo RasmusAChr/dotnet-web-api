@@ -8,12 +8,17 @@ namespace dotnet_web_api.Services;
 public class CardService(AppDbContext context) : ICardService
 {
     public async Task<List<CardResponse>> GetAllCardsAsync()
-        => await context.Cards.Select(c => new CardResponse
+    {
+        var card = await context.Cards.Select(c => new CardResponse
         {
             Id = c.Id,
             Name = c.Name,
-            Description = c.Description,
+            Description = c.Description
         }).ToListAsync();
+
+        return card;
+    }
+        
 
     public async Task<CardResponse?> GetCardByIdAsync(int id)
     {

@@ -9,8 +9,8 @@ out/
 *.db
 *.sqlite
 *.sqlite-journal
-*.sqlite-wal
-*.sqlite-shm
+*.db-wal
+*.db-shm
 
 # User-specific files
 *.user
