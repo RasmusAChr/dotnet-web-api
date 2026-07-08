@@ -1,3 +1,4 @@
+using dotnet_web_api.Dtos;
 using dotnet_web_api.Models;
 using dotnet_web_api.Services;
 using Microsoft.AspNetCore.Http;
@@ -10,7 +11,7 @@ namespace dotnet_web_api.Controllers;
 public class CardController(ICardService service) : ControllerBase
 {
     [HttpGet]
-    public async Task<ActionResult<List<Card>>> GetCards()
+    public async Task<ActionResult<List<CardResponse>>> GetCards()
     {
         return Ok(await service.GetAllCardsAsync());
     }

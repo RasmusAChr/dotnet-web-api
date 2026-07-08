@@ -1,29 +1,39 @@
+using dotnet_web_api.Data;
+using dotnet_web_api.Dtos;
 using dotnet_web_api.Models;
-using Microsoft.AspNetCore.Http.HttpResults;
+using Microsoft.EntityFrameworkCore;
 
 namespace dotnet_web_api.Services;
 
-public class CardService : ICardService
+public class CardService(AppDbContext context) : ICardService
 {
-    static List<Card> cards = new()
-    {
-        new Card { Id = 0, Name = "test1", Description = "This is test card one." },
-        new Card { Id = 1, Name = "test2", Description = "This is test card two." },
-        new Card { Id = 2, Name = "test3", Description = "This is test card three." },
-        new Card { Id = 3, Name = "test4", Description = "This is test card four." }
-    };
-    
-    public async Task<List<Card>> GetAllCardsAsync()
-        => await Task.FromResult(cards);
+    public async Task<List<CardResponse>> GetAllCardsAsync()
+        => await context.Cards.Select(c => new CardResponse
+        {
+            Name = c.Name,
+            Description = c.Description,
+        }).ToListAsync();
 
-    public async Task<Card?> GetCardByIdAsync(int id)
+    public async Task<CardResponse?> GetCardByIdAsync(int id)
     {
-        var card = cards.FirstOrDefault(c => c.Id == id);
-        return await Task.FromResult(card);
+        var card = await context.Cards
+            .Where(c => c.Id == id)
+            .Select(c => new CardResponse
+            {
+                Name = c.Name,
+                Description = c.Description
+            })
+            .FirstOrDefaultAsync();
+        
+        
+        
+        return card;
     }
 
-    public Task<Card> AddCardAsync(Card card)
+    public async Task<CardResponse> AddCardAsync(Card card)
     {
+        
+        
         throw new NotImplementedException();
     }
 
