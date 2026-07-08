@@ -10,6 +10,7 @@ public class CardService(AppDbContext context) : ICardService
     public async Task<List<CardResponse>> GetAllCardsAsync()
         => await context.Cards.Select(c => new CardResponse
         {
+            Id = c.Id,
             Name = c.Name,
             Description = c.Description,
         }).ToListAsync();
@@ -20,24 +21,36 @@ public class CardService(AppDbContext context) : ICardService
             .Where(c => c.Id == id)
             .Select(c => new CardResponse
             {
+                Id = c.Id,
                 Name = c.Name,
                 Description = c.Description
             })
             .FirstOrDefaultAsync();
         
-        
-        
         return card;
     }
 
-    public async Task<CardResponse> AddCardAsync(Card card)
+    public async Task<CardResponse> AddCardAsync(CreateCardRequest card)
     {
+        var newCard = new Card
+        {
+            Name = card.Name,
+            Description = card.Description
+        };
         
-        
-        throw new NotImplementedException();
+        context.Cards.Add(newCard);
+        await context.SaveChangesAsync();
+
+        return new CardResponse
+        {
+            Id = newCard.Id,
+            Name = newCard.Name,
+            Description = newCard.Description
+        };
+
     }
 
-    public Task<bool> UpdateCardAsync(int id, Card card)
+    public async Task<bool> UpdateCardAsync(int id, UpdateCardRequest card)
     {
         throw new NotImplementedException();
     }

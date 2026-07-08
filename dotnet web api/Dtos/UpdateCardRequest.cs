@@ -1,6 +1,6 @@
 namespace dotnet_web_api.Dtos;
 
-public class CardResponse
+public class UpdateCardRequest
 {
     public int Id { get; set; }
     public string Name { get; set; } = string.Empty;

@@ -17,7 +17,7 @@ public class CardController(ICardService service) : ControllerBase
     }
 
     [HttpGet("{id}")]
-    public async Task<ActionResult<Card>> GetCardByIdAsync(int id)
+    public async Task<ActionResult<CardResponse>> GetCard(int id)
     {
         var card = await service.GetCardByIdAsync(id);
         if (card == null)
@@ -25,6 +25,27 @@ public class CardController(ICardService service) : ControllerBase
             return NotFound("Card with given id was not found.");
         }
         return Ok(card);
+    }
+
+    [HttpPost]
+    public async Task<ActionResult<CardResponse>> AddCardAsync(CreateCardRequest card)
+    {
+        var createdCard = await service.AddCardAsync(card);
+        return CreatedAtAction(nameof(GetCard), new { id = createdCard.Id }, createdCard);
+    }
+
+    [HttpPut("{id}")]
+    public async Task<ActionResult> UpdateCardAsync(int id, UpdateCardRequest card)
+    {
+        var updatedCard = await service.UpdateCardAsync(id, card);
+        return updatedCard ? NoContent() : NotFound("Card with given id was not found.");
+    }
+
+    [HttpDelete("{id}")]
+    public async Task<ActionResult> DeleteCardAsync(int id)
+    {
+        var deletedCard = await service.DeleteCardAsync(id);
+        return deletedCard ? NoContent() : NotFound("Card with given id was not found.");
     }
 }
 
