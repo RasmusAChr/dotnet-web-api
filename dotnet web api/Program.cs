@@ -1,3 +1,4 @@
+using dotnet_web_api.Services;
 using Scalar.AspNetCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -7,6 +8,10 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllers();
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
 builder.Services.AddOpenApi();
+
+// Lives throughout the whole request.
+// The instance lives until the final result is returned.
+builder.Services.AddScoped<ICardService, CardService>();
 
 var app = builder.Build();
 
