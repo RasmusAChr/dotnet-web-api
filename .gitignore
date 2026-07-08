@@ -5,6 +5,13 @@ bin/
 obj/
 out/
 
+# sqlite
+*.db
+*.sqlite
+*.sqlite-journal
+*.sqlite-wal
+*.sqlite-shm
+
 # User-specific files
 *.user
 *.suo
