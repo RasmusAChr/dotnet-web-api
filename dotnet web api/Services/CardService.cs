@@ -52,11 +52,34 @@ public class CardService(AppDbContext context) : ICardService
 
     public async Task<bool> UpdateCardAsync(int id, UpdateCardRequest card)
     {
-        throw new NotImplementedException();
+        // Check if it's the same card
+        if (card.Id != id)
+            return false;
+        
+        var cardToUpdate = await context.Cards.FindAsync(id);
+        
+        // Check if the card is valid
+        if (cardToUpdate == null) 
+            return false;
+        
+        cardToUpdate.Name = card.Name;
+        cardToUpdate.Description = card.Description;
+        
+        await context.SaveChangesAsync();
+
+        return true;
     }
 
-    public Task<bool> DeleteCardAsync(int id)
+    public async Task<bool> DeleteCardAsync(int id)
     {
-        throw new NotImplementedException();
+        var cardToDelete = await context.Cards.FindAsync(id);
+        
+        if (cardToDelete == null)
+            return false;
+        
+        context.Cards.Remove(cardToDelete);
+        await context.SaveChangesAsync();
+        
+        return true;
     }
 }
