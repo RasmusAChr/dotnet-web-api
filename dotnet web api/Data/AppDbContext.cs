@@ -7,4 +7,5 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(op
 {
     public DbSet<Card> Cards => Set<Card>();
     public DbSet<Column> Columns => Set<Column>();
+    public DbSet<Board> Boards => Set<Board>();
 }

@@ -9,14 +9,14 @@ public class CardService(AppDbContext context) : ICardService
 {
     public async Task<List<CardResponse>> GetAllCardsAsync()
     {
-        var card = await context.Cards.Select(c => new CardResponse
+        var cards = await context.Cards.Select(c => new CardResponse
         {
             Id = c.Id,
             Name = c.Name,
             Description = c.Description
         }).ToListAsync();
 
-        return card;
+        return cards;
     }
         
 

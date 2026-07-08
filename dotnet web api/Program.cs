@@ -18,6 +18,7 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 // The instance lives until the final result is returned.
 builder.Services.AddScoped<ICardService, CardService>();
 builder.Services.AddScoped<IColumnService, ColumnService>();
+builder.Services.AddScoped<IBoardService, BoardService>();
 
 var app = builder.Build();
 

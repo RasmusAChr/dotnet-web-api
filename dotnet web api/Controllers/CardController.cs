@@ -21,9 +21,7 @@ public class CardController(ICardService service) : ControllerBase
     {
         var card = await service.GetCardByIdAsync(id);
         if (card == null)
-        {
             return NotFound("Card with given id was not found.");
-        }
         return Ok(card);
     }
 
