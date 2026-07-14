@@ -2,6 +2,8 @@ using dotnet_web_api.Data;
 using dotnet_web_api.Services;
 using Microsoft.EntityFrameworkCore;
 using Scalar.AspNetCore;
+using FluentValidation;
+using FluentValidation.AspNetCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -19,6 +21,9 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 builder.Services.AddScoped<ICardService, CardService>();
 builder.Services.AddScoped<IColumnService, ColumnService>();
 builder.Services.AddScoped<IBoardService, BoardService>();
+
+builder.Services.AddFluentValidationAutoValidation();
+builder.Services.AddValidatorsFromAssemblyContaining<Program>(); // Scans and registers all validators in project
 
 var app = builder.Build();
 

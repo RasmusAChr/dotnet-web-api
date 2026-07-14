@@ -1,6 +1,8 @@
 ﻿using dotnet_web_api.Data;
 using dotnet_web_api.Dtos;
 using dotnet_web_api.Models;
+using dotnet_web_api.Validators;
+using FluentValidation.Results;
 using Microsoft.EntityFrameworkCore;
 
 namespace dotnet_web_api.Services;
@@ -34,12 +36,16 @@ public class BoardService(AppDbContext context) : IBoardService
         return board;
     }
 
-    public async Task<BoardResponse> AddBoardAsync(CreateBoardRequest card)
+    public async Task<BoardResponse> AddBoardAsync(CreateBoardRequest boardRequest)
     {
+        //BoardCreateValidator validator = new BoardCreateValidator();
+        //ValidationResult result = await validator.ValidateAsync(boardRequest);
+        
+        
         var newBoard = new Board
         {
-            Name = card.Name,
-            Description = card.Description
+            Name = boardRequest.Name,
+            Description = boardRequest.Description
         };
         
         context.Boards.Add(newBoard);

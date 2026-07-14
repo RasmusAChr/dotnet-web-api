@@ -27,7 +27,7 @@ public class BoardController(IBoardService service) : ControllerBase
     [HttpPost]
     public async Task<ActionResult<BoardResponse>> CreateBoard(CreateBoardRequest board)
     {
-        var createdCard = service.AddBoardAsync(board);
+        var createdCard = await service.AddBoardAsync(board);
         return CreatedAtAction(nameof(GetBoard), new { id = createdCard.Id }, createdCard);
     }
 
