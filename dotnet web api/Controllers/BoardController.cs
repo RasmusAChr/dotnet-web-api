@@ -18,30 +18,30 @@ public class BoardController(IBoardService service) : ControllerBase
     [HttpGet("{id}")]
     public async Task<ActionResult<BoardResponse>> GetBoard(int id)
     {
-        var card = await service.GetBoardByIdAsync(id);
-        if (card == null)
+        var board = await service.GetBoardByIdAsync(id);
+        if (board == null)
             return NotFound("Board with given id was not found.");
-        return Ok(card);
+        return Ok(board);
     }
 
     [HttpPost]
     public async Task<ActionResult<BoardResponse>> CreateBoard(CreateBoardRequest board)
     {
-        var createdCard = await service.AddBoardAsync(board);
-        return CreatedAtAction(nameof(GetBoard), new { id = createdCard.Id }, createdCard);
+        var createdBoard = await service.AddBoardAsync(board);
+        return CreatedAtAction(nameof(GetBoard), new { id = createdBoard.Id }, createdBoard);
     }
 
     [HttpPut("{id}")]
     public async Task<ActionResult<BoardResponse>> UpdateBoard(int id, UpdateBoardRequest board)
     {
-        var updatedCard = await service.UpdateBoardAsync(id, board);
-        return updatedCard ? NoContent() : NotFound("Board with given id was not found.");
+        var updatedBoard = await service.UpdateBoardAsync(id, board);
+        return updatedBoard ? NoContent() : NotFound("Board with given id was not found.");
     }
 
     [HttpDelete("{id}")]
     public async Task<ActionResult> DeleteBoard(int id)
     {
-        var deletedCard = await service.DeleteBoardAsync(id);
-        return deletedCard ? NoContent() : NotFound("Board with given id was not found.");
+        var deletedBoard = await service.DeleteBoardAsync(id);
+        return deletedBoard ? NoContent() : NotFound("Board with given id was not found.");
     }
 }

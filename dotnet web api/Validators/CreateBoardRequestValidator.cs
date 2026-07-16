@@ -7,7 +7,9 @@ public class CreateBoardRequestValidator : AbstractValidator<CreateBoardRequest>
 {
     public CreateBoardRequestValidator()
     {
-        RuleFor(b => b.Name).Length(3, 50).WithMessage("Name must be between 3 and 50 characters.");
+        RuleFor(b => b.Name)
+            .NotEmpty().WithMessage("Name is required.") // NotEmpty to avoid 'null' inputs which Length doesn't cover
+            .Length(3, 50).WithMessage("Name must be between 3 and 50 characters.");
         RuleFor(b => b.Description).MaximumLength(200).WithMessage("Description must be at most 200 characters.");
     }
 }

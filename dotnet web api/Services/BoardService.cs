@@ -53,7 +53,14 @@ public class BoardService(
                     Id = column.Id,
                     Name = column.Name,
                     Description = column.Description,
-                    BoardId = column.BoardId
+                    BoardId = column.BoardId,
+                    Cards = column.Cards.Select(card => new CardResponse
+                    {
+                        Id = card.Id,
+                        Name = card.Name,
+                        Description = card.Description,
+                        ColumnId = card.ColumnId
+                    }).ToList()
                 }).ToList()
             })
             .FirstOrDefaultAsync();
