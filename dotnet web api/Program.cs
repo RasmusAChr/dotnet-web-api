@@ -1,4 +1,5 @@
 using dotnet_web_api.Data;
+using dotnet_web_api.ExceptionHandlers;
 using dotnet_web_api.Services;
 using Microsoft.EntityFrameworkCore;
 using Scalar.AspNetCore;
@@ -22,8 +23,12 @@ builder.Services.AddScoped<ICardService, CardService>();
 builder.Services.AddScoped<IColumnService, ColumnService>();
 builder.Services.AddScoped<IBoardService, BoardService>();
 
-builder.Services.AddFluentValidationAutoValidation();
+// builder.Services.AddFluentValidationAutoValidation(); // Deprecated
 builder.Services.AddValidatorsFromAssemblyContaining<Program>(); // Scans and registers all validators in project
+
+// Add exception handlers for Fluent Validation to avoid plain http 500
+builder.Services.AddExceptionHandler<ValidationExceptionHandler>();
+builder.Services.AddProblemDetails();
 
 var app = builder.Build();
 
@@ -39,5 +44,7 @@ app.UseHttpsRedirection();
 app.UseAuthorization();
 
 app.MapControllers();
+
+app.UseExceptionHandler();
 
 app.Run();

@@ -8,7 +8,10 @@ using Microsoft.EntityFrameworkCore;
 
 namespace dotnet_web_api.Services;
 
-public class BoardService(AppDbContext context) : IBoardService
+public class BoardService(
+    AppDbContext context,
+    IValidator<CreateBoardRequest> createValidator,
+    IValidator<UpdateBoardRequest> updateValidator) : IBoardService
 {
     public async Task<List<BoardResponse>> GetAllBoardsAsync()
     {
@@ -60,9 +63,7 @@ public class BoardService(AppDbContext context) : IBoardService
 
     public async Task<BoardResponse> AddBoardAsync(CreateBoardRequest boardRequest)
     {
-        //BoardCreateValidator validator = new BoardCreateValidator();
-        //ValidationResult result = await validator.ValidateAsync(boardRequest);
-        
+        await createValidator.ValidateAndThrowAsync(boardRequest);
         
         var newBoard = new Board
         {
@@ -81,9 +82,11 @@ public class BoardService(AppDbContext context) : IBoardService
         };
     }
 
-    public async Task<bool> UpdateBoardAsync(int id, UpdateBoardRequest board)
+    public async Task<bool> UpdateBoardAsync(int id, UpdateBoardRequest boardRequest)
     {
-        if (board.Id != id)
+        await updateValidator.ValidateAndThrowAsync(boardRequest);
+        
+        if (boardRequest.Id != id)
             return false;
         
         var boardToUpdate = await context.Boards.FindAsync(id);
@@ -91,8 +94,8 @@ public class BoardService(AppDbContext context) : IBoardService
         if (boardToUpdate == null)
             return false;
         
-        boardToUpdate.Name = board.Name;
-        boardToUpdate.Description = board.Description;
+        boardToUpdate.Name = boardRequest.Name;
+        boardToUpdate.Description = boardRequest.Description;
         
         await context.SaveChangesAsync();
         return true;

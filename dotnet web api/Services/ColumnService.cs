@@ -1,11 +1,15 @@
 using dotnet_web_api.Data;
 using dotnet_web_api.Dtos;
 using dotnet_web_api.Models;
+using FluentValidation;
 using Microsoft.EntityFrameworkCore;
 
 namespace dotnet_web_api.Services;
 
-public class ColumnService(AppDbContext context) : IColumnService
+public class ColumnService(
+    AppDbContext context,
+    IValidator<CreateColumnRequest> createValidator,
+    IValidator<UpdateColumnRequest> updateValidator) : IColumnService
 {
     public async Task<List<ColumnResponse>> GetAllColumnsAsync()
     {
@@ -50,17 +54,19 @@ public class ColumnService(AppDbContext context) : IColumnService
         return column;
     }
 
-    public async Task<ColumnResponse?> AddColumnAsync(CreateColumnRequest column)
+    public async Task<ColumnResponse?> AddColumnAsync(CreateColumnRequest columnRequest)
     {
-        var boardExists = await context.Boards.AnyAsync(b => b.Id == column.BoardId);
+        await createValidator.ValidateAndThrowAsync(columnRequest);
+        
+        var boardExists = await context.Boards.AnyAsync(b => b.Id == columnRequest.BoardId);
         if (!boardExists)
             return null;
         
         var newColumn = new Column
         {
-            Name = column.Name,
-            Description = column.Description,
-            BoardId = column.BoardId
+            Name = columnRequest.Name,
+            Description = columnRequest.Description,
+            BoardId = columnRequest.BoardId
         };
 
         context.Columns.Add(newColumn);
@@ -75,12 +81,14 @@ public class ColumnService(AppDbContext context) : IColumnService
         };
     }
 
-    public async Task<bool> UpdateColumnAsync(int id, UpdateColumnRequest column)
+    public async Task<bool> UpdateColumnAsync(int id, UpdateColumnRequest columnRequest)
     {
-        if (column.Id != id)
+        await updateValidator.ValidateAndThrowAsync(columnRequest);
+        
+        if (columnRequest.Id != id)
             return false;
         
-        var boardExists = await context.Boards.AnyAsync(b => b.Id == column.BoardId);
+        var boardExists = await context.Boards.AnyAsync(b => b.Id == columnRequest.BoardId);
         if  (!boardExists)
             return false;
         
@@ -88,9 +96,9 @@ public class ColumnService(AppDbContext context) : IColumnService
         if (columnToUpdate == null)
             return false;
         
-        columnToUpdate.Name = column.Name;
-        columnToUpdate.Description = column.Description;
-        columnToUpdate.BoardId = column.BoardId;
+        columnToUpdate.Name = columnRequest.Name;
+        columnToUpdate.Description = columnRequest.Description;
+        columnToUpdate.BoardId = columnRequest.BoardId;
         
         await context.SaveChangesAsync();
         return true;

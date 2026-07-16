@@ -1,11 +1,15 @@
 using dotnet_web_api.Data;
 using dotnet_web_api.Dtos;
 using dotnet_web_api.Models;
+using FluentValidation;
 using Microsoft.EntityFrameworkCore;
 
 namespace dotnet_web_api.Services;
 
-public class CardService(AppDbContext context) : ICardService
+public class CardService(
+    AppDbContext context,
+    IValidator<CreateCardRequest> createValidator,
+    IValidator<UpdateCardRequest> updateValidator) : ICardService
 {
     public async Task<List<CardResponse>> GetAllCardsAsync()
     {
@@ -37,17 +41,19 @@ public class CardService(AppDbContext context) : ICardService
         return card;
     }
 
-    public async Task<CardResponse?> AddCardAsync(CreateCardRequest card)
+    public async Task<CardResponse?> AddCardAsync(CreateCardRequest cardRequest)
     {
-        var columnExists = await context.Columns.AnyAsync(column => column.Id == card.ColumnId);
+        await createValidator.ValidateAndThrowAsync(cardRequest);
+        
+        var columnExists = await context.Columns.AnyAsync(column => column.Id == cardRequest.ColumnId);
         if (!columnExists)
             return null;
         
         var newCard = new Card
         {
-            Name = card.Name,
-            Description = card.Description,
-            ColumnId = card.ColumnId
+            Name = cardRequest.Name,
+            Description = cardRequest.Description,
+            ColumnId = cardRequest.ColumnId
         };
         
         context.Cards.Add(newCard);
@@ -63,10 +69,12 @@ public class CardService(AppDbContext context) : ICardService
 
     }
 
-    public async Task<bool> UpdateCardAsync(int id, UpdateCardRequest card)
+    public async Task<bool> UpdateCardAsync(int id, UpdateCardRequest cardRequest)
     {
+        await updateValidator.ValidateAndThrowAsync(cardRequest);
+        
         // Check if it's the same card
-        if (card.Id != id)
+        if (cardRequest.Id != id)
             return false;
         
         var cardToUpdate = await context.Cards.FindAsync(id);
@@ -76,13 +84,13 @@ public class CardService(AppDbContext context) : ICardService
             return false;
         
         // Check if column is valid
-        var columnExists = await context.Columns.AnyAsync(column => column.Id == card.ColumnId);
+        var columnExists = await context.Columns.AnyAsync(column => column.Id == cardRequest.ColumnId);
         if (!columnExists)
             return false;
         
-        cardToUpdate.Name = card.Name;
-        cardToUpdate.Description = card.Description;
-        cardToUpdate.ColumnId = card.ColumnId;
+        cardToUpdate.Name = cardRequest.Name;
+        cardToUpdate.Description = cardRequest.Description;
+        cardToUpdate.ColumnId = cardRequest.ColumnId;
         
         await context.SaveChangesAsync();
 
