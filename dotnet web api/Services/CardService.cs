@@ -13,7 +13,8 @@ public class CardService(AppDbContext context) : ICardService
         {
             Id = c.Id,
             Name = c.Name,
-            Description = c.Description
+            Description = c.Description,
+            ColumnId = c.ColumnId
         }).ToListAsync();
 
         return cards;
@@ -28,19 +29,25 @@ public class CardService(AppDbContext context) : ICardService
             {
                 Id = c.Id,
                 Name = c.Name,
-                Description = c.Description
+                Description = c.Description,
+                ColumnId = c.ColumnId
             })
             .FirstOrDefaultAsync();
         
         return card;
     }
 
-    public async Task<CardResponse> AddCardAsync(CreateCardRequest card)
+    public async Task<CardResponse?> AddCardAsync(CreateCardRequest card)
     {
+        var columnExists = await context.Columns.AnyAsync(column => column.Id == card.ColumnId);
+        if (!columnExists)
+            return null;
+        
         var newCard = new Card
         {
             Name = card.Name,
-            Description = card.Description
+            Description = card.Description,
+            ColumnId = card.ColumnId
         };
         
         context.Cards.Add(newCard);
@@ -50,7 +57,8 @@ public class CardService(AppDbContext context) : ICardService
         {
             Id = newCard.Id,
             Name = newCard.Name,
-            Description = newCard.Description
+            Description = newCard.Description,
+            ColumnId = newCard.ColumnId
         };
 
     }
@@ -67,8 +75,14 @@ public class CardService(AppDbContext context) : ICardService
         if (cardToUpdate == null) 
             return false;
         
+        // Check if column is valid
+        var columnExists = await context.Columns.AnyAsync(column => column.Id == card.ColumnId);
+        if (!columnExists)
+            return false;
+        
         cardToUpdate.Name = card.Name;
         cardToUpdate.Description = card.Description;
+        cardToUpdate.ColumnId = card.ColumnId;
         
         await context.SaveChangesAsync();
 

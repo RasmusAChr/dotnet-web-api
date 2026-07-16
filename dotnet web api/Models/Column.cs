@@ -11,4 +11,5 @@ public class Column
     public string? Description { get; set; }
     public int BoardId { get; set; }
     public Board? Board { get; set; }
+    public List<Card> Cards { get; } = new List<Card>();
 }

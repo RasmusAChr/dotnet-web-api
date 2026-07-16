@@ -29,6 +29,9 @@ public class CardController(ICardService service) : ControllerBase
     public async Task<ActionResult<CardResponse>> AddCardAsync(CreateCardRequest card)
     {
         var createdCard = await service.AddCardAsync(card);
+        if (createdCard == null)
+            return NotFound($"Column with id {card.ColumnId} was not found.");
+                
         return CreatedAtAction(nameof(GetCard), new { id = createdCard.Id }, createdCard);
     }
 

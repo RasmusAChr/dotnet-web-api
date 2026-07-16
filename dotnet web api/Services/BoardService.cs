@@ -21,7 +21,15 @@ public class BoardService(AppDbContext context) : IBoardService
             {
                 Id = column.Id,
                 Name = column.Name,
-                BoardId = column.BoardId
+                Description = column.Description,
+                BoardId = column.BoardId,
+                Cards = column.Cards.Select(card => new CardResponse
+                {
+                    Id = card.Id,
+                    Name = card.Name,
+                    Description = card.Description,
+                    ColumnId = card.ColumnId
+                }).ToList()
             }).ToList()
         }).ToListAsync();
 
@@ -36,7 +44,14 @@ public class BoardService(AppDbContext context) : IBoardService
             {
                 Id = board.Id,
                 Name = board.Name,
-                Description = board.Description
+                Description = board.Description,
+                Columns = board.Columns.Select(column => new ColumnResponse
+                {
+                    Id = column.Id,
+                    Name = column.Name,
+                    Description = column.Description,
+                    BoardId = column.BoardId
+                }).ToList()
             })
             .FirstOrDefaultAsync();
 

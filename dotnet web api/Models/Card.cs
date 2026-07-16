@@ -9,5 +9,7 @@ public class Card
     public string Name { get; set; } = string.Empty;
     [StringLength(200, MinimumLength = 0)]
     public string? Description { get; set; } = string.Empty;
+    public int ColumnId  { get; set; }
+    public Column? Column { get; set; }
     // Maybe labels in future
 }

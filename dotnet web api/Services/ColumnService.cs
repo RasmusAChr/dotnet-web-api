@@ -14,7 +14,14 @@ public class ColumnService(AppDbContext context) : IColumnService
             Id = c.Id,
             Name = c.Name,
             Description = c.Description,
-            BoardId = c.BoardId
+            BoardId = c.BoardId,
+            Cards = c.Cards.Select(card => new CardResponse
+            {
+                Id = card.Id,
+                Name = card.Name,
+                Description = card.Description,
+                ColumnId = card.ColumnId
+            }).ToList()
         }).ToListAsync();
         
         return columns;
@@ -28,7 +35,15 @@ public class ColumnService(AppDbContext context) : IColumnService
             {
                 Id = c.Id,
                 Name = c.Name,
-                Description = c.Description
+                Description = c.Description,
+                BoardId = c.BoardId,
+                Cards = c.Cards.Select(card => new CardResponse
+                {
+                    Id = card.Id,
+                    Name = card.Name,
+                    Description = card.Description,
+                    ColumnId = card.ColumnId
+                }).ToList()
             })
             .FirstOrDefaultAsync();
         
@@ -65,13 +80,17 @@ public class ColumnService(AppDbContext context) : IColumnService
         if (column.Id != id)
             return false;
         
+        var boardExists = await context.Boards.AnyAsync(b => b.Id == column.BoardId);
+        if  (!boardExists)
+            return false;
+        
         var columnToUpdate = await context.Columns.FindAsync(id);
-
         if (columnToUpdate == null)
             return false;
         
         columnToUpdate.Name = column.Name;
         columnToUpdate.Description = column.Description;
+        columnToUpdate.BoardId = column.BoardId;
         
         await context.SaveChangesAsync();
         return true;
