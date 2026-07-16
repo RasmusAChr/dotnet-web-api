@@ -2,6 +2,7 @@
 using dotnet_web_api.Dtos;
 using dotnet_web_api.Models;
 using dotnet_web_api.Validators;
+using FluentValidation;
 using FluentValidation.Results;
 using Microsoft.EntityFrameworkCore;
 
@@ -15,7 +16,13 @@ public class BoardService(AppDbContext context) : IBoardService
         {
             Id = board.Id,
             Name = board.Name,
-            Description = board.Description
+            Description = board.Description,
+            Columns = board.Columns.Select(column => new ColumnResponse
+            {
+                Id = column.Id,
+                Name = column.Name,
+                BoardId = column.BoardId
+            }).ToList()
         }).ToListAsync();
 
         return boards;

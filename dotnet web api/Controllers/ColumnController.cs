@@ -28,6 +28,8 @@ public class ColumnController(IColumnService service) : ControllerBase
     public async Task<ActionResult<ColumnResponse>> AddColumn(CreateColumnRequest column)
     {
         var newColumn = await service.AddColumnAsync(column);
+        if (newColumn == null)
+            return NotFound($"Board with id {column.BoardId} does not exist.");
         return CreatedAtAction(nameof(GetColumnById), new { id = newColumn.Id }, newColumn);
     }
 

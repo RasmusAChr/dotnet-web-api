@@ -9,4 +9,5 @@ public class Board
     public string Name { get; set; } = string.Empty;
     [StringLength(200, MinimumLength = 10)]
     public string? Description { get; set; }
+    public IList<Column> Columns { get; } = new  List<Column>();
 }

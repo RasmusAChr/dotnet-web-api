@@ -13,7 +13,8 @@ public class ColumnService(AppDbContext context) : IColumnService
         {
             Id = c.Id,
             Name = c.Name,
-            Description = c.Description
+            Description = c.Description,
+            BoardId = c.BoardId
         }).ToListAsync();
         
         return columns;
@@ -34,12 +35,17 @@ public class ColumnService(AppDbContext context) : IColumnService
         return column;
     }
 
-    public async Task<ColumnResponse> AddColumnAsync(CreateColumnRequest column)
+    public async Task<ColumnResponse?> AddColumnAsync(CreateColumnRequest column)
     {
+        var boardExists = await context.Boards.AnyAsync(b => b.Id == column.BoardId);
+        if (!boardExists)
+            return null;
+        
         var newColumn = new Column
         {
             Name = column.Name,
-            Description = column.Description
+            Description = column.Description,
+            BoardId = column.BoardId
         };
 
         context.Columns.Add(newColumn);
@@ -49,7 +55,8 @@ public class ColumnService(AppDbContext context) : IColumnService
         {
             Id = newColumn.Id,
             Name = newColumn.Name,
-            Description = newColumn.Description
+            Description = newColumn.Description,
+            BoardId = newColumn.BoardId
         };
     }
 
