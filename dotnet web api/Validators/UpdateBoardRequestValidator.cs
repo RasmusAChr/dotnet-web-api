@@ -7,7 +7,8 @@ public class UpdateBoardRequestValidator : AbstractValidator<UpdateBoardRequest>
 {
     public UpdateBoardRequestValidator()
     {
-        RuleFor(b => b.Name).Length(3, 50).WithMessage("Name must be between 3 and 50 characters.");
-        RuleFor(b => b.Description).MaximumLength(200).WithMessage("Description must be at most 200 characters.");
+        RuleFor(c => c.Id).GreaterThan(0).WithMessage("Id must be a positive integer");
+        RuleFor(c => c.Name).Length(3, 50).WithMessage("Name must be between 3 and 50 characters.");
+        RuleFor(c => c.Description).MaximumLength(200).WithMessage("Description must be at most 200 characters.");
     }
 }

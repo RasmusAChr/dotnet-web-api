@@ -7,7 +7,7 @@ public class Board
     public int Id { get; set; }
     [StringLength(50, MinimumLength = 3)]
     public string Name { get; set; } = string.Empty;
-    [StringLength(200, MinimumLength = 10)]
+    [StringLength(200)]
     public string? Description { get; set; }
-    public IList<Column> Columns { get; } = new  List<Column>();
+    public IList<Column> Columns { get; } = new List<Column>();
 }
