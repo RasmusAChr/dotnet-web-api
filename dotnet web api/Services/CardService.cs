@@ -69,24 +69,20 @@ public class CardService(
 
     }
 
-    public async Task<bool> UpdateCardAsync(int id, UpdateCardRequest cardRequest)
+    public async Task<CardResponse?> UpdateCardAsync(int id, UpdateCardRequest cardRequest)
     {
         await updateValidator.ValidateAndThrowAsync(cardRequest);
-        
-        // Check if it's the same card
-        if (cardRequest.Id != id)
-            return false;
         
         var cardToUpdate = await context.Cards.FindAsync(id);
         
         // Check if the card is valid
         if (cardToUpdate == null) 
-            return false;
+            return null;
         
         // Check if column is valid
         var columnExists = await context.Columns.AnyAsync(column => column.Id == cardRequest.ColumnId);
         if (!columnExists)
-            return false;
+            return null;
         
         cardToUpdate.Name = cardRequest.Name;
         cardToUpdate.Description = cardRequest.Description;
@@ -94,7 +90,13 @@ public class CardService(
         
         await context.SaveChangesAsync();
 
-        return true;
+        return new CardResponse
+        {
+            Id = cardToUpdate.Id,
+            Name = cardToUpdate.Name,
+            Description = cardToUpdate.Description,
+            ColumnId = cardToUpdate.ColumnId
+        };
     }
 
     public async Task<bool> DeleteCardAsync(int id)

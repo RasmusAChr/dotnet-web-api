@@ -35,7 +35,9 @@ public class BoardController(IBoardService service) : ControllerBase
     public async Task<ActionResult<BoardResponse>> UpdateBoard(int id, UpdateBoardRequest board)
     {
         var updatedBoard = await service.UpdateBoardAsync(id, board);
-        return updatedBoard ? NoContent() : NotFound("Board with given id was not found.");
+        if (updatedBoard == null)
+            return NotFound("Board with given id was not found.");
+        return Ok(updatedBoard);
     }
 
     [HttpDelete("{id}")]

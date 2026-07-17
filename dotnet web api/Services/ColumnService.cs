@@ -81,27 +81,30 @@ public class ColumnService(
         };
     }
 
-    public async Task<bool> UpdateColumnAsync(int id, UpdateColumnRequest columnRequest)
+    public async Task<ColumnResponse?> UpdateColumnAsync(int id, UpdateColumnRequest columnRequest)
     {
         await updateValidator.ValidateAndThrowAsync(columnRequest);
         
-        if (columnRequest.Id != id)
-            return false;
-        
         var boardExists = await context.Boards.AnyAsync(b => b.Id == columnRequest.BoardId);
         if  (!boardExists)
-            return false;
+            return null;
         
         var columnToUpdate = await context.Columns.FindAsync(id);
         if (columnToUpdate == null)
-            return false;
+            return null;
         
         columnToUpdate.Name = columnRequest.Name;
         columnToUpdate.Description = columnRequest.Description;
         columnToUpdate.BoardId = columnRequest.BoardId;
         
         await context.SaveChangesAsync();
-        return true;
+        return new ColumnResponse
+        {
+            Id = columnToUpdate.Id,
+            Name = columnToUpdate.Name,
+            Description = columnToUpdate.Description,
+            BoardId = columnToUpdate.BoardId
+        };
     }
 
     public async Task<bool> DeleteColumnAsync(int id)

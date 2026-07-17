@@ -36,10 +36,12 @@ public class CardController(ICardService service) : ControllerBase
     }
 
     [HttpPut("{id}")]
-    public async Task<ActionResult> UpdateCardAsync(int id, UpdateCardRequest card)
+    public async Task<ActionResult<CardResponse?>> UpdateCardAsync(int id, UpdateCardRequest card)
     {
         var updatedCard = await service.UpdateCardAsync(id, card);
-        return updatedCard ? NoContent() : NotFound("Card with given id was not found.");
+        if (updatedCard == null)
+            return NotFound();
+        return Ok(updatedCard);
     }
 
     [HttpDelete("{id}")]

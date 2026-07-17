@@ -34,12 +34,12 @@ public class ColumnController(IColumnService service) : ControllerBase
     }
 
     [HttpPut("{id}")]
-    public async Task<ActionResult<bool>> UpdateColumn(int id, UpdateColumnRequest column)
+    public async Task<ActionResult<ColumnResponse?>> UpdateColumn(int id, UpdateColumnRequest column)
     {
-        var isUpdated = await service.UpdateColumnAsync(id, column);
-        if (!isUpdated)
+        var updatedColumn = await service.UpdateColumnAsync(id, column);
+        if (updatedColumn == null)
             return NotFound();
-        return Ok(isUpdated);
+        return Ok(updatedColumn);
     }
 
     [HttpDelete("{id}")]

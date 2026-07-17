@@ -89,23 +89,25 @@ public class BoardService(
         };
     }
 
-    public async Task<bool> UpdateBoardAsync(int id, UpdateBoardRequest boardRequest)
+    public async Task<BoardResponse?> UpdateBoardAsync(int id, UpdateBoardRequest boardRequest)
     {
         await updateValidator.ValidateAndThrowAsync(boardRequest);
-        
-        if (boardRequest.Id != id)
-            return false;
         
         var boardToUpdate = await context.Boards.FindAsync(id);
 
         if (boardToUpdate == null)
-            return false;
+            return null;
         
         boardToUpdate.Name = boardRequest.Name;
         boardToUpdate.Description = boardRequest.Description;
         
         await context.SaveChangesAsync();
-        return true;
+        return new BoardResponse
+        {
+            Id = boardToUpdate.Id,
+            Name = boardToUpdate.Name,
+            Description = boardToUpdate.Description
+        };
     }
 
     public async Task<bool> DeleteBoardAsync(int id)

@@ -8,6 +8,6 @@ public interface ICardService
     Task<List<CardResponse>> GetAllCardsAsync();
     Task<CardResponse?> GetCardByIdAsync(int id);
     Task<CardResponse?> AddCardAsync(CreateCardRequest card);
-    Task<bool> UpdateCardAsync(int id, UpdateCardRequest card);
+    Task<CardResponse?> UpdateCardAsync(int id, UpdateCardRequest card);
     Task<bool> DeleteCardAsync(int id);
 }
