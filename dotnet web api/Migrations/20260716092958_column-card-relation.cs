@@ -5,7 +5,7 @@
 namespace dotnet_web_api.Migrations
 {
     /// <inheritdoc />
-    public partial class columncardrelation : Migration
+    public partial class ColumnCardRelation : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)

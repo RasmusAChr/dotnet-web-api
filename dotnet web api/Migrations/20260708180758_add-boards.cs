@@ -5,7 +5,7 @@
 namespace dotnet_web_api.Migrations
 {
     /// <inheritdoc />
-    public partial class addboards : Migration
+    public partial class AddBoards : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)

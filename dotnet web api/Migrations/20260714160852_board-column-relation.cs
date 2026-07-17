@@ -5,7 +5,7 @@
 namespace dotnet_web_api.Migrations
 {
     /// <inheritdoc />
-    public partial class boardcolumnrelation : Migration
+    public partial class BoardColumnRelation : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)

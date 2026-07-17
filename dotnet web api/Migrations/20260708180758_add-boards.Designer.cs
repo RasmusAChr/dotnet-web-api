@@ -11,7 +11,7 @@ namespace dotnet_web_api.Migrations
 {
     [DbContext(typeof(AppDbContext))]
     [Migration("20260708180758_add-boards")]
-    partial class addboards
+    partial class AddBoards
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

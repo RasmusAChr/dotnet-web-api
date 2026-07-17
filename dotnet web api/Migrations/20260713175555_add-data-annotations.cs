@@ -5,7 +5,7 @@
 namespace dotnet_web_api.Migrations
 {
     /// <inheritdoc />
-    public partial class adddataannotations : Migration
+    public partial class AddDataAnnotations : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)

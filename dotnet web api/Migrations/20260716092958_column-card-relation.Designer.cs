@@ -11,7 +11,7 @@ namespace dotnet_web_api.Migrations
 {
     [DbContext(typeof(AppDbContext))]
     [Migration("20260716092958_column-card-relation")]
-    partial class columncardrelation
+    partial class ColumnCardRelation
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

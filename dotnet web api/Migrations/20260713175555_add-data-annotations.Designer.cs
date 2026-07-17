@@ -11,7 +11,7 @@ namespace dotnet_web_api.Migrations
 {
     [DbContext(typeof(AppDbContext))]
     [Migration("20260713175555_add-data-annotations")]
-    partial class adddataannotations
+    partial class AddDataAnnotations
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

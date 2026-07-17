@@ -11,7 +11,7 @@ namespace dotnet_web_api.Migrations
 {
     [DbContext(typeof(AppDbContext))]
     [Migration("20260708121625_add-columns")]
-    partial class addcolumns
+    partial class AddColumns
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
