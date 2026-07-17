@@ -1,8 +1,3 @@
 namespace dotnet_web_api.ExceptionHandlers;
 
-public class NotFoundException : Exception
-{
-    public NotFoundException(string message) : base(message)
-    {
-    }
-}
+public class NotFoundException(string message) : Exception(message);

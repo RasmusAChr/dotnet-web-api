@@ -111,9 +111,12 @@ public class ColumnService(
     public async Task<bool> DeleteColumnAsync(int id)
     {
         var columnToDelete = await context.Columns.FindAsync(id);
-
         if (columnToDelete == null)
             throw new NotFoundException($"Column with id {id} not found");
+        
+        var hasCards = await context.Cards.AnyAsync(c => c.ColumnId == id);
+        if (hasCards)
+            throw new ConflictException($"Cannot delete column with id {id} because it has associated cards");
         
         context.Columns.Remove(columnToDelete);
         await context.SaveChangesAsync();
