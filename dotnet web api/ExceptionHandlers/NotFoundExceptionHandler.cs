@@ -1,5 +1,4 @@
 using Microsoft.AspNetCore.Diagnostics;
-using dotnet_web_api.ExceptionHandlers;
 
 namespace dotnet_web_api.ExceptionHandlers;
 

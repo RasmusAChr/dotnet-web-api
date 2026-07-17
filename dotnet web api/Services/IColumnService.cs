@@ -6,7 +6,7 @@ public interface IColumnService
 {
     Task<List<ColumnResponse>> GetAllColumnsAsync();
     Task<ColumnResponse?> GetColumnByIdAsync(int id);
-    Task<ColumnResponse?> AddColumnAsync(CreateColumnRequest column);
-    Task<ColumnResponse?> UpdateColumnAsync(int id, UpdateColumnRequest column);
+    Task<ColumnResponse> AddColumnAsync(CreateColumnRequest column);
+    Task<ColumnResponse> UpdateColumnAsync(int id, UpdateColumnRequest column);
     Task<bool> DeleteColumnAsync(int id);
 }

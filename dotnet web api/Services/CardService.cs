@@ -42,13 +42,13 @@ public class CardService(
         return card;
     }
 
-    public async Task<CardResponse?> AddCardAsync(CreateCardRequest cardRequest)
+    public async Task<CardResponse> AddCardAsync(CreateCardRequest cardRequest)
     {
         await createValidator.ValidateAndThrowAsync(cardRequest);
         
         var columnExists = await context.Columns.AnyAsync(column => column.Id == cardRequest.ColumnId);
         if (!columnExists)
-            return null;
+            throw new NotFoundException($"Column with id {cardRequest.ColumnId} not found");
         
         var newCard = new Card
         {
@@ -70,7 +70,7 @@ public class CardService(
 
     }
 
-    public async Task<CardResponse?> UpdateCardAsync(int id, UpdateCardRequest cardRequest)
+    public async Task<CardResponse> UpdateCardAsync(int id, UpdateCardRequest cardRequest)
     {
         await updateValidator.ValidateAndThrowAsync(cardRequest);
         

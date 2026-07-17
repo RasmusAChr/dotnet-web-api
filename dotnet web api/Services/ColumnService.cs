@@ -55,13 +55,13 @@ public class ColumnService(
         return column;
     }
 
-    public async Task<ColumnResponse?> AddColumnAsync(CreateColumnRequest columnRequest)
+    public async Task<ColumnResponse> AddColumnAsync(CreateColumnRequest columnRequest)
     {
         await createValidator.ValidateAndThrowAsync(columnRequest);
         
         var boardExists = await context.Boards.AnyAsync(b => b.Id == columnRequest.BoardId);
         if (!boardExists)
-            return null;
+            throw new NotFoundException($"Board with id {columnRequest.BoardId} not found");
         
         var newColumn = new Column
         {
@@ -82,7 +82,7 @@ public class ColumnService(
         };
     }
 
-    public async Task<ColumnResponse?> UpdateColumnAsync(int id, UpdateColumnRequest columnRequest)
+    public async Task<ColumnResponse> UpdateColumnAsync(int id, UpdateColumnRequest columnRequest)
     {
         await updateValidator.ValidateAndThrowAsync(columnRequest);
         

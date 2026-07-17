@@ -28,24 +28,22 @@ public class ColumnController(IColumnService service) : ControllerBase
     public async Task<ActionResult<ColumnResponse>> AddColumn(CreateColumnRequest column)
     {
         var newColumn = await service.AddColumnAsync(column);
-        if (newColumn == null)
-            return NotFound($"Board with id {column.BoardId} does not exist.");
+        // if (newColumn == null)
+        //     return NotFound($"Board with id {column.BoardId} does not exist.");
         return CreatedAtAction(nameof(GetColumnById), new { id = newColumn.Id }, newColumn);
     }
 
     [HttpPut("{id}")]
-    public async Task<ActionResult<ColumnResponse?>> UpdateColumn(int id, UpdateColumnRequest column)
+    public async Task<ActionResult<ColumnResponse>> UpdateColumn(int id, UpdateColumnRequest column)
     {
         var updatedColumn = await service.UpdateColumnAsync(id, column);
         return Ok(updatedColumn);
     }
 
     [HttpDelete("{id}")]
-    public async Task<ActionResult<bool>> DeleteColumn(int id)
+    public async Task<ActionResult> DeleteColumn(int id)
     {
-        var isDeleted = await service.DeleteColumnAsync(id);
-        if (!isDeleted)
-            return NotFound();
-        return Ok(isDeleted);
+        await service.DeleteColumnAsync(id);
+        return NoContent();
     }
 }

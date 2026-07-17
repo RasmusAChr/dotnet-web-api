@@ -2,9 +2,7 @@
 using dotnet_web_api.Dtos;
 using dotnet_web_api.ExceptionHandlers;
 using dotnet_web_api.Models;
-using dotnet_web_api.Validators;
 using FluentValidation;
-using FluentValidation.Results;
 using Microsoft.EntityFrameworkCore;
 
 namespace dotnet_web_api.Services;
@@ -90,7 +88,7 @@ public class BoardService(
         };
     }
 
-    public async Task<BoardResponse?> UpdateBoardAsync(int id, UpdateBoardRequest boardRequest)
+    public async Task<BoardResponse> UpdateBoardAsync(int id, UpdateBoardRequest boardRequest)
     {
         await updateValidator.ValidateAndThrowAsync(boardRequest);
         
@@ -116,7 +114,7 @@ public class BoardService(
         var boardToDelete = await context.Boards.FindAsync(id);
 
         if (boardToDelete == null)
-            return false;
+            throw new NotFoundException($"Board with id {id} not found");
         
         context.Boards.Remove(boardToDelete);
         await context.SaveChangesAsync();
