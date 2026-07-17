@@ -1,5 +1,6 @@
 using dotnet_web_api.Data;
 using dotnet_web_api.Dtos;
+using dotnet_web_api.ExceptionHandlers;
 using dotnet_web_api.Models;
 using FluentValidation;
 using Microsoft.EntityFrameworkCore;
@@ -77,12 +78,12 @@ public class CardService(
         
         // Check if the card is valid
         if (cardToUpdate == null) 
-            return null;
+            throw new NotFoundException($"Card with id {id} not found");
         
         // Check if column is valid
         var columnExists = await context.Columns.AnyAsync(column => column.Id == cardRequest.ColumnId);
         if (!columnExists)
-            return null;
+            throw new NotFoundException($"Column with id {cardRequest.ColumnId} not found");
         
         cardToUpdate.Name = cardRequest.Name;
         cardToUpdate.Description = cardRequest.Description;
@@ -104,7 +105,7 @@ public class CardService(
         var cardToDelete = await context.Cards.FindAsync(id);
         
         if (cardToDelete == null)
-            return false;
+            throw new NotFoundException($"Card with id {id} not found");
         
         context.Cards.Remove(cardToDelete);
         await context.SaveChangesAsync();

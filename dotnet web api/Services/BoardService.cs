@@ -1,5 +1,6 @@
 ﻿using dotnet_web_api.Data;
 using dotnet_web_api.Dtos;
+using dotnet_web_api.ExceptionHandlers;
 using dotnet_web_api.Models;
 using dotnet_web_api.Validators;
 using FluentValidation;
@@ -96,8 +97,8 @@ public class BoardService(
         var boardToUpdate = await context.Boards.FindAsync(id);
 
         if (boardToUpdate == null)
-            return null;
-        
+            throw new NotFoundException($"Board with id {id} not found");
+
         boardToUpdate.Name = boardRequest.Name;
         boardToUpdate.Description = boardRequest.Description;
         

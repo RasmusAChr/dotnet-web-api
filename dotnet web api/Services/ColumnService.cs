@@ -1,5 +1,6 @@
 using dotnet_web_api.Data;
 using dotnet_web_api.Dtos;
+using dotnet_web_api.ExceptionHandlers;
 using dotnet_web_api.Models;
 using FluentValidation;
 using Microsoft.EntityFrameworkCore;
@@ -86,12 +87,12 @@ public class ColumnService(
         await updateValidator.ValidateAndThrowAsync(columnRequest);
         
         var boardExists = await context.Boards.AnyAsync(b => b.Id == columnRequest.BoardId);
-        if  (!boardExists)
-            return null;
+        if (!boardExists)
+            throw new NotFoundException($"Board with id {columnRequest.BoardId} not found");
         
         var columnToUpdate = await context.Columns.FindAsync(id);
         if (columnToUpdate == null)
-            return null;
+            throw new NotFoundException($"Column with id {id} not found");
         
         columnToUpdate.Name = columnRequest.Name;
         columnToUpdate.Description = columnRequest.Description;
@@ -112,7 +113,7 @@ public class ColumnService(
         var columnToDelete = await context.Columns.FindAsync(id);
 
         if (columnToDelete == null)
-            return false;
+            throw new NotFoundException($"Column with id {id} not found");
         
         context.Columns.Remove(columnToDelete);
         await context.SaveChangesAsync();

@@ -37,8 +37,6 @@ public class ColumnController(IColumnService service) : ControllerBase
     public async Task<ActionResult<ColumnResponse?>> UpdateColumn(int id, UpdateColumnRequest column)
     {
         var updatedColumn = await service.UpdateColumnAsync(id, column);
-        if (updatedColumn == null)
-            return NotFound();
         return Ok(updatedColumn);
     }
 

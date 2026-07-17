@@ -28,6 +28,7 @@ builder.Services.AddValidatorsFromAssemblyContaining<Program>(); // Scans and re
 
 // Add exception handlers for Fluent Validation to avoid plain http 500
 builder.Services.AddExceptionHandler<ValidationExceptionHandler>();
+builder.Services.AddExceptionHandler<NotFoundExceptionHandler>();
 builder.Services.AddProblemDetails();
 
 var app = builder.Build();

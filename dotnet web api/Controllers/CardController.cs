@@ -39,8 +39,6 @@ public class CardController(ICardService service) : ControllerBase
     public async Task<ActionResult<CardResponse?>> UpdateCardAsync(int id, UpdateCardRequest card)
     {
         var updatedCard = await service.UpdateCardAsync(id, card);
-        if (updatedCard == null)
-            return NotFound();
         return Ok(updatedCard);
     }
 
