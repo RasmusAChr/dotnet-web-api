@@ -1,6 +1,4 @@
-﻿using dotnet_web_api.Models;
-
-namespace dotnet_web_api.Dtos;
+﻿namespace dotnet_web_api.Dtos;
 
 public class BoardResponse
 {

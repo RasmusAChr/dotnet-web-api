@@ -1,5 +1,4 @@
 using dotnet_web_api.Dtos;
-using dotnet_web_api.Models;
 
 namespace dotnet_web_api.Services;
 

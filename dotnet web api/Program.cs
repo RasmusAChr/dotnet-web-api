@@ -4,7 +4,6 @@ using dotnet_web_api.Services;
 using Microsoft.EntityFrameworkCore;
 using Scalar.AspNetCore;
 using FluentValidation;
-using FluentValidation.AspNetCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
